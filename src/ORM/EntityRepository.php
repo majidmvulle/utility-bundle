@@ -1,6 +1,6 @@
 <?php
 
-namespace MajidMvulle\UtilityBundle\ORM;
+namespace MajidMvulle\Bundle\UtilityBundle\ORM;
 
 use Doctrine\ORM\QueryBuilder;
 

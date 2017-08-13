@@ -1,9 +1,9 @@
 <?php
 
-namespace MajidMvulle\UtilityBundle\Form;
+namespace MajidMvulle\Bundle\UtilityBundle\Form;
 
 use JMS\DiExtraBundle\Annotation as DI;
-use MajidMvulle\UtilityBundle\Model\City;
+use MajidMvulle\Bundle\UtilityBundle\Model\City;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;

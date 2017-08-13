@@ -1,6 +1,6 @@
 <?php
 
-namespace MajidMvulle\UtilityBundle\Annotation;
+namespace MajidMvulle\Bundle\UtilityBundle\Annotation;
 
 use Doctrine\Common\Annotations\Annotation\Target;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationAnnotation;

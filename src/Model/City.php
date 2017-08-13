@@ -1,6 +1,6 @@
 <?php
 
-namespace MajidMvulle\UtilityBundle\Model;
+namespace MajidMvulle\Bundle\UtilityBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -141,7 +141,7 @@ class City
     {
         $cities = [];
 
-        /** @var \MajidMvulle\UtilityBundle\Model\City $city */
+        /** @var \MajidMvulle\Bundle\UtilityBundle\Model\City $city */
         foreach (self::getCities()->toArray() as $city) {
             $cities[$city->getId()] = $city->getName();
         }

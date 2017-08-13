@@ -1,6 +1,6 @@
 <?php
 
-namespace MajidMvulle\UtilityBundle\EventListener;
+namespace MajidMvulle\Bundle\UtilityBundle\EventListener;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use JMS\DiExtraBundle\Annotation as DI;
@@ -55,7 +55,7 @@ class OptionsAnnotationListener
         }
 
         list($controllerObject, $methodName) = $controller;
-        $optionsAnnotation = 'MajidMvulle\UtilityBundle\Annotation\Options';
+        $optionsAnnotation = 'MajidMvulle\Bundle\UtilityBundle\Annotation\Options';
 
         $controllerReflectionObject = new \ReflectionObject($controllerObject);
         $reflectionMethod = $controllerReflectionObject->getMethod($methodName);

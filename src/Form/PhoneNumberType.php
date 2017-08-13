@@ -1,9 +1,9 @@
 <?php
 
-namespace MajidMvulle\UtilityBundle\Form;
+namespace MajidMvulle\Bundle\UtilityBundle\Form;
 
 use JMS\DiExtraBundle\Annotation as DI;
-use MajidMvulle\UtilityBundle\Validator\Constraints\PhoneNumber;
+use MajidMvulle\Bundle\UtilityBundle\Validator\Constraints\PhoneNumber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;

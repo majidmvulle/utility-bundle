@@ -1,6 +1,6 @@
 <?php
 
-namespace MajidMvulle\UtilityBundle;
+namespace MajidMvulle\Bundle\UtilityBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

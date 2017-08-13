@@ -1,6 +1,6 @@
 <?php
 
-namespace MajidMvulle\UtilityBundle\Twig;
+namespace MajidMvulle\Bundle\UtilityBundle\Twig;
 
 use JMS\DiExtraBundle\Annotation as DI;
 

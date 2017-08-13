@@ -1,6 +1,6 @@
 <?php
 
-namespace MajidMvulle\UtilityBundle\Validator\Constraints;
+namespace MajidMvulle\Bundle\UtilityBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraints\Regex;
 

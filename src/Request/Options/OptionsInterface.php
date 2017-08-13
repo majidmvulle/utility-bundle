@@ -1,6 +1,6 @@
 <?php
 
-namespace MajidMvulle\UtilityBundle\Request\Options;
+namespace MajidMvulle\Bundle\UtilityBundle\Request\Options;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace MajidMvulle\UtilityBundle\Request\ParamConverter;
+namespace MajidMvulle\Bundle\UtilityBundle\Request\ParamConverter;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use JMS\DiExtraBundle\Annotation as DI;
