@@ -24,7 +24,10 @@
     "doctrine/annotations": "^1.4",
     "sensio/framework-extra-bundle": "^3.0",
     "jms/di-extra-bundle": "^1.8",
-    "erusev/parsedown": "^1.6"
+    "erusev/parsedown": "^1.6",
+    "swiftmailer/swiftmailer": "^6.0",
+    "giggsey/libphonenumber-for-php": "^8.8",
+    "twilio/sdk": "^5.15"
   },
   "require-dev": {
     "doctrine/doctrine-bundle": "^1.3",
