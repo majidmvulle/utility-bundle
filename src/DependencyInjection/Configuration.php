@@ -18,27 +18,23 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('majidmvulle');
+        $rootNode = $treeBuilder->root('majidmvulle_utility')->addDefaultsIfNotSet();
 
         $rootNode
             ->children()
-                ->arrayNode('utility')->addDefaultsIfNotSet()
+                ->arrayNode('mailer')->addDefaultsIfNotSet()
                     ->children()
-                        ->arrayNode('mailer')->addDefaultsIfNotSet()
-                            ->children()
-                                ->scalarNode('from_email')->defaultValue('')->end()
-                                ->scalarNode('from_sender_name')->defaultValue('')->end()
-                            ->end()
-                        ->end()//mailer
-                        ->arrayNode('twilio')->addDefaultsIfNotSet()
-                            ->children()
-                                ->scalarNode('sid')->defaultValue('')->end()
-                                ->scalarNode('token')->defaultValue('')->end()
-                                ->scalarNode('from_number')->defaultValue('')->end()
-                            ->end()
-                        ->end()//twilio
+                        ->scalarNode('from_email')->defaultValue('')->end()
+                        ->scalarNode('from_sender_name')->defaultValue('')->end()
                     ->end()
-                ->end()
+                ->end()//mailer
+                ->arrayNode('twilio')->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('sid')->defaultValue('')->end()
+                        ->scalarNode('token')->defaultValue('')->end()
+                        ->scalarNode('from_number')->defaultValue('')->end()
+                    ->end()
+                ->end()//twilio
             ->end();
 
         return $treeBuilder;

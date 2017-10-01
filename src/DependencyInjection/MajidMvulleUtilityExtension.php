@@ -22,11 +22,11 @@ class MajidMvulleUtilityExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('majidmvulle.utility.mailer.from_email', $config['utility']['mailer']['from_email']);
-        $container->setParameter('majidmvulle.utility.mailer.from_sender_name', $config['utility']['mailer']['from_sender_name']);
-        $container->setParameter('majidmvulle.utility.twilio.sid', $config['utility']['twilio']['sid']);
-        $container->setParameter('majidmvulle.utility.twilio.token', $config['utility']['twilio']['token']);
-        $container->setParameter('majidmvulle.utility.twilio.from_number', $config['utility']['twilio']['from_number']);
+        $container->setParameter('majidmvulle.utility.mailer.from_email', $config['majidmvulle_utility']['mailer']['from_email']);
+        $container->setParameter('majidmvulle.utility.mailer.from_sender_name', $config['majidmvulle_utility']['mailer']['from_sender_name']);
+        $container->setParameter('majidmvulle.utility.twilio.sid', $config['majidmvulle_utility']['twilio']['sid']);
+        $container->setParameter('majidmvulle.utility.twilio.token', $config['majidmvulle_utility']['twilio']['token']);
+        $container->setParameter('majidmvulle.utility.twilio.from_number', $config['majidmvulle_utility']['twilio']['from_number']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
@@ -34,6 +34,6 @@ class MajidMvulleUtilityExtension extends Extension
 
     public function getAlias()
     {
-        return 'majidmvulle';
+        return 'majidmvulle_utility';
     }
 }
