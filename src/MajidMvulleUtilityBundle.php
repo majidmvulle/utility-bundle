@@ -11,4 +11,13 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class MajidMvulleUtilityBundle extends Bundle
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getContainerExtension()
+    {
+        $this->extension = $this->createContainerExtension();
+
+        return parent::getContainerExtension();
+    }
 }
