@@ -5,6 +5,7 @@ namespace MajidMvulle\Bundle\UtilityBundle;
 use JMS\DiExtraBundle\Annotation as DI;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberType;
 use libphonenumber\PhoneNumberUtil;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Twilio\Rest\Client;
@@ -81,6 +82,10 @@ class TwilioManager
             $phoneNumberProto = $this->phoneUtil->parse($toPhoneNumber, 'AE');
 
             if (!$this->phoneUtil->isValidNumberForRegion($phoneNumberProto, 'AE')) { //only send sms to UAE numbers
+                return;
+            }
+
+            if ($this->phoneUtil->getNumberType($phoneNumberProto) !== PhoneNumberType::MOBILE) { //only send sms to mobile numbers
                 return;
             }
 
