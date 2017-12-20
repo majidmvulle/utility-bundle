@@ -79,6 +79,11 @@ class TwilioManager
 
         try {
             $phoneNumberProto = $this->phoneUtil->parse($toPhoneNumber, 'AE');
+
+            if (!$this->phoneUtil->isValidNumberForRegion($phoneNumberProto, 'AE')) { //only send sms to UAE numbers
+                return;
+            }
+
             $phoneNumber = $this->phoneUtil->format($phoneNumberProto, PhoneNumberFormat::INTERNATIONAL);
 
             $response = $this->client->messages->create($phoneNumber, ['from' => $this->fromNumber, 'body' => $message]);
