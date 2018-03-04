@@ -7,7 +7,6 @@ use MajidMvulle\Bundle\UtilityBundle\Validator\Constraints\PhoneNumber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Class PhoneNumberType.
@@ -24,11 +23,7 @@ class PhoneNumberType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'constraints' => [
-                new NotBlank(),
-                new PhoneNumber(),
-            ],
+        $resolver->setDefaults(['constraints' => [new PhoneNumber()],
         ]);
     }
 

@@ -7,7 +7,6 @@ use MajidMvulle\Bundle\UtilityBundle\Validator\Constraints\MobileNumber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Class MobileNumberType.
@@ -24,12 +23,7 @@ class MobileNumberType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'constraints' => [
-                new NotBlank(),
-                new MobileNumber(),
-            ],
-        ]);
+        $resolver->setDefaults(['constraints' => [new MobileNumber()]]);
     }
 
     public function getParent()
