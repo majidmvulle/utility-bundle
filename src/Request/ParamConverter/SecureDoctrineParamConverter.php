@@ -3,6 +3,7 @@
 namespace MajidMvulle\Bundle\UtilityBundle\Request\ParamConverter;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NoResultException;
 use JMS\DiExtraBundle\Annotation as DI;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter;
@@ -30,6 +31,11 @@ class SecureDoctrineParamConverter extends DoctrineParamConverter
      * @var AuthorizationChecker
      */
     private $authorizationChecker;
+
+    /**
+     * @var ManagerRegistry
+     */
+    private $registry;
 
     /**
      * SecureDoctrineParamConverter Constructor.
@@ -101,5 +107,152 @@ class SecureDoctrineParamConverter extends DoctrineParamConverter
         }
 
         return false;
+    }
+
+    private function getOptions(ParamConverter $configuration)
+    {
+        $defaultValues = ['entity_manager' => null, 'exclude' => [], 'mapping' => [], 'strip_null' => false, 'expr' => null, 'id' => null, 'repository_method' => null, 'map_method_signature' => false];
+        $passedOptions = $configuration->getOptions();
+        if (isset($passedOptions['repository_method'])) {
+            @trigger_error('The repository_method option of @ParamConverter is deprecated and will be removed in 5.0. Use the expr option or @Entity.', E_USER_DEPRECATED);
+        }
+        if (isset($passedOptions['map_method_signature'])) {
+            @trigger_error('The map_method_signature option of @ParamConverter is deprecated and will be removed in 5.0. Use the expr option or @Entity.', E_USER_DEPRECATED);
+        }
+        $extraKeys = array_diff(array_keys($passedOptions), array_keys($defaultValues));
+        if ($extraKeys) {
+            throw new \InvalidArgumentException(sprintf('Invalid option(s) passed to @%s: %s', $this->getAnnotationName($configuration), implode(', ', $extraKeys)));
+        }
+
+        return array_replace($defaultValues, $passedOptions);
+    }
+
+    private function getAnnotationName(ParamConverter $configuration)
+    {
+        $r = new \ReflectionClass($configuration);
+
+        return $r->getShortName();
+    }
+
+    private function find($class, Request $request, $options, $name)
+    {
+        if ($options['mapping'] || $options['exclude']) {
+            return false;
+        }
+        $id = $this->getIdentifier($request, $options, $name);
+        if (false === $id || null === $id) {
+            return false;
+        }
+        if ($options['repository_method']) {
+            $method = $options['repository_method'];
+        } else {
+            $method = 'find';
+        }
+        try {
+            return $this->getManager($options['entity_manager'], $class)->getRepository($class)->$method($id);
+        } catch (NoResultException $e) {
+            return;
+        }
+    }
+
+    private function getIdentifier(Request $request, $options, $name)
+    {
+        if (null !== $options['id']) {
+            if (!is_array($options['id'])) {
+                $name = $options['id'];
+            } elseif (is_array($options['id'])) {
+                $id = [];
+                foreach ($options['id'] as $field) {
+                    $id[$field] = $request->attributes->get($field);
+                }
+
+                return $id;
+            }
+        }
+        if ($request->attributes->has($name)) {
+            return $request->attributes->get($name);
+        }
+        if ($request->attributes->has('id') && !$options['id']) {
+            return $request->attributes->get('id');
+        }
+
+        return false;
+    }
+
+    private function findOneBy($class, Request $request, $options)
+    {
+        if (!$options['mapping']) {
+            $keys = $request->attributes->keys();
+            $options['mapping'] = $keys ? array_combine($keys, $keys) : [];
+        }
+        foreach ($options['exclude'] as $exclude) {
+            unset($options['mapping'][$exclude]);
+        }
+        if (!$options['mapping']) {
+            return false;
+        }
+        // if a specific id has been defined in the options and there is no corresponding attribute
+        // return false in order to avoid a fallback to the id which might be of another object
+        if ($options['id'] && null === $request->attributes->get($options['id'])) {
+            return false;
+        }
+        $criteria = [];
+        $em = $this->getManager($options['entity_manager'], $class);
+        $metadata = $em->getClassMetadata($class);
+        $mapMethodSignature = $options['repository_method'] && $options['map_method_signature'] && true === $options['map_method_signature'];
+        foreach ($options['mapping'] as $attribute => $field) {
+            if ($metadata->hasField($field) || ($metadata->hasAssociation($field) && $metadata->isSingleValuedAssociation($field)) || $mapMethodSignature) {
+                $criteria[$field] = $request->attributes->get($attribute);
+            }
+        }
+        if ($options['strip_null']) {
+            $criteria = array_filter($criteria, function ($value) {
+                return null !== $value;
+            });
+        }
+        if (!$criteria) {
+            return false;
+        }
+        if ($options['repository_method']) {
+            $repositoryMethod = $options['repository_method'];
+        } else {
+            $repositoryMethod = 'findOneBy';
+        }
+        try {
+            if ($mapMethodSignature) {
+                return $this->findDataByMapMethodSignature($em, $class, $repositoryMethod, $criteria);
+            }
+
+            return $em->getRepository($class)->$repositoryMethod($criteria);
+        } catch (NoResultException $e) {
+            return;
+        }
+    }
+
+    private function getManager($name, $class)
+    {
+        if (null === $name) {
+            return $this->registry->getManagerForClass($class);
+        }
+
+        return $this->registry->getManager($name);
+    }
+
+    private function findDataByMapMethodSignature($em, $class, $repositoryMethod, $criteria)
+    {
+        $arguments = [];
+        $repository = $em->getRepository($class);
+        $ref = new \ReflectionMethod($repository, $repositoryMethod);
+        foreach ($ref->getParameters() as $parameter) {
+            if (array_key_exists($parameter->name, $criteria)) {
+                $arguments[] = $criteria[$parameter->name];
+            } elseif ($parameter->isDefaultValueAvailable()) {
+                $arguments[] = $parameter->getDefaultValue();
+            } else {
+                throw new \InvalidArgumentException(sprintf('Repository method "%s::%s" requires that you provide a value for the "$%s" argument.', get_class($repository), $repositoryMethod, $parameter->name));
+            }
+        }
+
+        return $ref->invokeArgs($repository, $arguments);
     }
 }
