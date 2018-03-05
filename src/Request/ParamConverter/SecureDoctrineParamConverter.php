@@ -51,6 +51,7 @@ class SecureDoctrineParamConverter extends DoctrineParamConverter
     public function __construct(ManagerRegistry $registry, AuthorizationChecker $authorizationChecker)
     {
         $this->authorizationChecker = $authorizationChecker;
+        $this->registry = $registry;
         parent::__construct($registry);
     }
 
