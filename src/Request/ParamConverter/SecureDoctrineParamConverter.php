@@ -207,7 +207,7 @@ class SecureDoctrineParamConverter extends DoctrineParamConverter
 
             return $em->getRepository($class)->$repositoryMethod($criteria);
         } catch (NoResultException $e) {
-            return;
+            return null;
         }
     }
 
