@@ -35,7 +35,7 @@ services:
             - '@doctrine'
             - '@security.authorization_checker'
         tags:
-            - { name: request.param_converter, attributes: {converter: 'utility.secure_doctrine_param_converter', priority: 1} }
+            - { name: request.param_converter, priority: 1 }
 
     MajidMvulle\Bundle\UtilityBundle\Twig\Markdown:
         alias: majidmvulle.utility.twig.markdown
