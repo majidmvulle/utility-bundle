@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle\Form;
 
-use JMS\DiExtraBundle\Annotation as DI;
 use MajidMvulle\Bundle\UtilityBundle\Model\City;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -12,40 +13,25 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Class CityType.
  *
  * @author Majid Mvulle <majid@majidmvulle.com>
- *
- * @DI\FormType("majidmvulle.utility.form.city")
- * @DI\Tag(name="form.type", attributes={"alias": "majidmvulle_utility_form_city"})
  */
 class CityType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['label' => 'City', 'choices' => City::getCitiesList(), 'empty_value' => '']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getParent()
+    public function getParent(): string
     {
         return ChoiceType::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
-        return 'majidmvulle_utility_form_city';
+        return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->getBlockPrefix();
     }

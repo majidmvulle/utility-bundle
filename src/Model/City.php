@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -36,44 +38,27 @@ class City
      */
     protected $country;
 
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return (string) $this->getId();
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
-    public function getCountry()
+    public function getCountry(): string
     {
         return $this->country;
     }
 
-    /**
-     * Cities.
-     *
-     * @return ArrayCollection
-     */
-    public static function getCities()
+    public static function getCities(): ArrayCollection
     {
         $listOfCities = [
             [
@@ -132,12 +117,7 @@ class City
         return $cities;
     }
 
-    /**
-     * Get cities as choice list.
-     *
-     * @return array
-     */
-    public static function getCitiesList()
+    public static function getCitiesList(): array
     {
         $cities = [];
 
@@ -149,14 +129,7 @@ class City
         return $cities;
     }
 
-    /**
-     * Gets city by id.
-     *
-     * @param $id
-     *
-     * @return mixed
-     */
-    public static function getCityById($id)
+    public static function getCityById($id): self
     {
         return self::getCities()->matching(Criteria::create()->where(Criteria::expr()->eq('id', $id)))->first();
     }

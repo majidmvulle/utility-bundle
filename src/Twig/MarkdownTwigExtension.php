@@ -1,16 +1,13 @@
 <?php
 
-namespace MajidMvulle\Bundle\UtilityBundle\Twig;
+declare(strict_types=1);
 
-use JMS\DiExtraBundle\Annotation as DI;
+namespace MajidMvulle\Bundle\UtilityBundle\Twig;
 
 /**
  * Class MarkdownTwigExtension.
  *
  * @author Majid Mvulle <majid@majidmvulle.com>
- *
- * @DI\Service("majidmvulle.utility.twig.markdown_extension", public=false)
- * @DI\Tag(name="twig.extension")
  */
 class MarkdownTwigExtension extends \Twig_Extension
 {
@@ -19,24 +16,12 @@ class MarkdownTwigExtension extends \Twig_Extension
      */
     private $parser;
 
-    /**
-     * MarkdownTwigExtension Constructor.
-     *
-     * @DI\InjectParams({
-     *  "parser" = @DI\Inject("majidmvulle.utility.twig.markdown")
-     * })
-     *
-     * @param Markdown $parser
-     */
     public function __construct(Markdown $parser)
     {
         $this->parser = $parser;
     }
 
-    /**
-     * @return array
-     */
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new \Twig_SimpleFilter(
@@ -46,20 +31,12 @@ class MarkdownTwigExtension extends \Twig_Extension
         ];
     }
 
-    /**
-     * @param $content
-     *
-     * @return string
-     */
-    public function markdownToHtml($content)
+    public function markdownToHtml($content): string
     {
         return $this->parser->toHtml($content);
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'majidmvulle_markdown_extension';
     }

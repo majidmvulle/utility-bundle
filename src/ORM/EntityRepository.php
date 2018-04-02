@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle\ORM;
 
 use Doctrine\ORM\QueryBuilder;
@@ -11,12 +13,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class EntityRepository extends \Doctrine\ORM\EntityRepository
 {
-    /**
-     * @param QueryBuilder $queryBuilder
-     *
-     * @return array
-     */
-    protected function getResults(QueryBuilder $queryBuilder)
+    protected function getResults(QueryBuilder $queryBuilder): array
     {
         $maxResults = $queryBuilder->getMaxResults();
 

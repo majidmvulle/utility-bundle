@@ -1,17 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle\EventListener;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use JMS\DiExtraBundle\Annotation as DI;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 /**
  * Class OptionsAnnotationListener.
  *
  * @author Majid Mvulle <majid@majidmvulle.com>
- *
- * @DI\Service()
  */
 class OptionsAnnotationListener
 {
@@ -20,26 +19,12 @@ class OptionsAnnotationListener
      */
     private $annotationsReader;
 
-    /**
-     * OptionsAnnotationListener Constructor.
-     *
-     * @DI\InjectParams({
-     * "annotationsReader" = @DI\Inject("annotations.reader")
-     * })
-     *
-     * @param AnnotationReader $annotationsReader
-     */
     public function __construct(AnnotationReader $annotationsReader)
     {
         $this->annotationsReader = $annotationsReader;
     }
 
-    /**
-     * @param FilterControllerEvent $event
-     *
-     * @DI\Observe("kernel.controller")
-     */
-    public function onKernelController(FilterControllerEvent $event)
+    public function onKernelController(FilterControllerEvent $event): void
     {
         $controller = $event->getController();
         $request = $event->getRequest();

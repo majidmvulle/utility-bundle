@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\RegexValidator;
 
 /**
  * Class PhoneNumber.
@@ -19,25 +22,19 @@ class PhoneNumber extends Regex
     /**
      * @var string
      */
-    public $pattern = '/^(0|((\+|00)?971))(2|3|4|6|7|9|50|52|54|55|56)\d{7}$/';
+    public $pattern = '/^(0|((\+|00)?971))(2|3|4|6|7|9)\d{7}$/';
 
     /**
      * @var bool
      */
     public $match = true;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function validatedBy()
+    public function validatedBy(): string
     {
-        return 'Symfony\Component\Validator\Constraints\RegexValidator';
+        return RegexValidator::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getRequiredOptions()
+    public function getRequiredOptions(): array
     {
         return [];
     }

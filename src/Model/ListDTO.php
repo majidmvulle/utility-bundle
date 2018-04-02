@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle\Model;
 
 use MajidMvulle\Bundle\UtilityBundle\Request\Options\ListOptions;
@@ -26,12 +28,6 @@ class ListDTO
      */
     public $items;
 
-    /**
-     * ListDTO Constructor.
-     *
-     * @param ListOptions $listOptions
-     * @param array       $items
-     */
     public function __construct(ListOptions $listOptions, $items = [])
     {
         $this->page = $listOptions->get('page');

@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle\Form;
 
-use JMS\DiExtraBundle\Annotation as DI;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -11,9 +12,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Class LanguageType.
  *
  * @author Majid Mvulle <majid@majidmvulle.com>
- *
- * @DI\FormType("majidmvulle.utility.form.language")
- * @DI\Tag(name="form.type", attributes={"alias": "majidmvulle_utility_form_language"})
  */
 class LanguageType extends AbstractType
 {
@@ -22,43 +20,28 @@ class LanguageType extends AbstractType
      */
     protected $choices;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->choices = ['en' => 'English', 'ar' => 'Arabic'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['choices' => $this->choices, 'empty_value' => '-- Choose your Preferred Language --']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getParent()
+    public function getParent(): string
     {
         return ChoiceType::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
-        return 'majidmvulle_utility_form_language';
+        return '';
     }
 }

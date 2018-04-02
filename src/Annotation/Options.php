@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle\Annotation;
 
 use Doctrine\Common\Annotations\Annotation\Target;
@@ -16,31 +18,20 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationAnnotation;
 class Options extends ConfigurationAnnotation
 {
     /**
-     * The parameter name.
-     *
      * @var string
      */
     protected $name;
 
     /**
-     * The parameter class.
-     *
      * @var string
      */
     protected $class;
 
     /**
-     * Query string parameters.
-     *
      * @var array
      */
     protected $requestParams = [];
 
-    /**
-     * Options Constructor.
-     *
-     * @param array $values
-     */
     public function __construct(array $values)
     {
         parent::__construct($values);
@@ -50,77 +41,49 @@ class Options extends ConfigurationAnnotation
         }
     }
 
-    /**
-     * Sets the class.
-     *
-     * @param string $class The class name
-     */
-    public function setValue($class)
+    public function setValue($class): void
     {
         $this->class = $class;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name ?: 'options';
     }
 
-    /**
-     * @param string $name
-     */
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
-    public function getClass()
+    public function getClass(): string
     {
         return $this->class;
     }
 
-    /**
-     * @param string $class
-     */
-    public function setClass($class)
+    public function setClass($class): void
     {
         $this->class = $class;
     }
 
-    /**
-     * @return array
-     */
-    public function getRequestParams()
+    public function getRequestParams(): array
     {
         return $this->requestParams;
     }
 
-    /**
-     * @param array $requestParams
-     */
-    public function setRequestParams($requestParams)
+    public function setRequestParams($requestParams): self
     {
         $this->requestParams = $requestParams;
 
         return new $this->class($requestParams);
     }
 
-    public function getAliasName()
+    public function getAliasName(): string
     {
         return 'options';
     }
 
-    /**
-     * Multiple Options annotations are not allowed.
-     *
-     * @return bool
-     */
-    public function allowArray()
+    public function allowArray(): bool
     {
         return false;
     }

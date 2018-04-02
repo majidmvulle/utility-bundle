@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\RegexValidator;
 
 /**
  * Class MobileNumber.
@@ -26,18 +29,12 @@ class MobileNumber extends Regex
      */
     public $match = true;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function validatedBy()
+    public function validatedBy(): string
     {
-        return 'Symfony\Component\Validator\Constraints\RegexValidator';
+        return RegexValidator::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getRequiredOptions()
+    public function getRequiredOptions(): array
     {
         return [];
     }

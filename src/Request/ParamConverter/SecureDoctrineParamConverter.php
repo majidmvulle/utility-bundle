@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle\Request\ParamConverter;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NoResultException;
-use JMS\DiExtraBundle\Annotation as DI;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,9 +17,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * Class SecureDoctrineParamConverter.
  *
  * @author Majid Mvulle <majid@majidmvulle.com>
- *
- * @DI\Service()
- * @DI\Tag(name="request.param_converter",  attributes={"converter"="utility.secure_doctrine_param_converter", "priority"=1}))
  */
 class SecureDoctrineParamConverter extends DoctrineParamConverter
 {
@@ -37,17 +35,6 @@ class SecureDoctrineParamConverter extends DoctrineParamConverter
      */
     private $registry;
 
-    /**
-     * SecureDoctrineParamConverter Constructor.
-     *
-     * @DI\InjectParams({
-     *  "registry" = @DI\Inject("doctrine"),
-     *  "authorizationChecker" = @DI\Inject("security.authorization_checker")
-     * })
-     *
-     * @param ManagerRegistry      $registry
-     * @param AuthorizationChecker $authorizationChecker
-     */
     public function __construct(ManagerRegistry $registry, AuthorizationChecker $authorizationChecker)
     {
         $this->authorizationChecker = $authorizationChecker;
@@ -55,10 +42,7 @@ class SecureDoctrineParamConverter extends DoctrineParamConverter
         parent::__construct($registry);
     }
 
-    /**
-     *  {@inheritdoc}
-     */
-    public function apply(Request $request, ParamConverter $configuration)
+    public function apply(Request $request, ParamConverter $configuration): bool
     {
         //Copied from parent
         $name = $configuration->getName();
@@ -95,10 +79,7 @@ class SecureDoctrineParamConverter extends DoctrineParamConverter
         return true;
     }
 
-    /**
-     *  {@inheritdoc}
-     */
-    public function supports(ParamConverter $configuration)
+    public function supports(ParamConverter $configuration): bool
     {
         $actions = [self::CREATE, self::VIEW, self::EDIT, self::DELETE];
         $options = $this->getOptions($configuration);
@@ -110,7 +91,7 @@ class SecureDoctrineParamConverter extends DoctrineParamConverter
         return false;
     }
 
-    private function getOptions(ParamConverter $configuration)
+    private function getOptions(ParamConverter $configuration): array
     {
         $defaultValues = ['entity_manager' => null, 'exclude' => [], 'mapping' => [], 'strip_null' => false, 'expr' => null, 'id' => null, 'repository_method' => null, 'map_method_signature' => false];
         $passedOptions = $configuration->getOptions();
@@ -128,14 +109,14 @@ class SecureDoctrineParamConverter extends DoctrineParamConverter
         return array_replace($defaultValues, $passedOptions);
     }
 
-    private function getAnnotationName(ParamConverter $configuration)
+    private function getAnnotationName(ParamConverter $configuration): string
     {
         $r = new \ReflectionClass($configuration);
 
         return $r->getShortName();
     }
 
-    private function find($class, Request $request, $options, $name)
+    private function find($class, Request $request, $options, $name): mixed
     {
         if ($options['mapping'] || $options['exclude']) {
             return false;
@@ -156,7 +137,7 @@ class SecureDoctrineParamConverter extends DoctrineParamConverter
         }
     }
 
-    private function getIdentifier(Request $request, $options, $name)
+    private function getIdentifier(Request $request, $options, $name): mixed
     {
         if (null !== $options['id']) {
             if (!is_array($options['id'])) {
@@ -180,7 +161,7 @@ class SecureDoctrineParamConverter extends DoctrineParamConverter
         return false;
     }
 
-    private function findOneBy($class, Request $request, $options)
+    private function findOneBy($class, Request $request, $options): ?mixed
     {
         if (!$options['mapping']) {
             $keys = $request->attributes->keys();
@@ -239,7 +220,7 @@ class SecureDoctrineParamConverter extends DoctrineParamConverter
         return $this->registry->getManager($name);
     }
 
-    private function findDataByMapMethodSignature($em, $class, $repositoryMethod, $criteria)
+    private function findDataByMapMethodSignature($em, $class, $repositoryMethod, $criteria): mixed
     {
         $arguments = [];
         $repository = $em->getRepository($class);

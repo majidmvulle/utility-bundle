@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle\Request\Options;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -21,11 +23,6 @@ abstract class AbstractOptions implements OptionsInterface
      */
     private $resolver;
 
-    /**
-     * AbstractOptions Constructor.
-     *
-     * @param array $options
-     */
     public function __construct(array $options = [])
     {
         $this->resolver = new OptionsResolver();
@@ -33,22 +30,12 @@ abstract class AbstractOptions implements OptionsInterface
         $this->options = $this->resolver->resolve($options);
     }
 
-    /**
-     * @param $option
-     *
-     * @return bool
-     */
-    public function has($option)
+    public function has($option): bool
     {
         return isset($this->options[$option]);
     }
 
-    /**
-     * @param $option
-     *
-     * @return string|null
-     */
-    public function get($option)
+    public function get($option): ?string
     {
         if (!$this->has($option)) {
             return null;

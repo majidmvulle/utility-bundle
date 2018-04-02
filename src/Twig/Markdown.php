@@ -2,14 +2,10 @@
 
 namespace MajidMvulle\Bundle\UtilityBundle\Twig;
 
-use JMS\DiExtraBundle\Annotation as DI;
-
 /**
  * Class Markdown.
  *
  * @author Majid Mvulle <majid@majidmvulle.com>
- *
- * @DI\Service("majidmvulle.utility.twig.markdown")
  */
 class Markdown
 {
@@ -18,22 +14,12 @@ class Markdown
      */
     private $parser;
 
-    /**
-     * Markdown Constructor.
-     */
     public function __construct()
     {
         $this->parser = new \Parsedown();
     }
 
-    /**
-     * Converts markdown to HTML.
-     *
-     * @param $text
-     *
-     * @return string
-     */
-    public function toHtml($text)
+    public function toHtml($text): string
     {
         $html = $this->parser->text($text);
 

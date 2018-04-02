@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle\Request\Options;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -11,10 +13,5 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 interface OptionsInterface
 {
-    /**
-     * @param OptionsResolver $optionsResolver
-     *
-     * @return mixed
-     */
     public function configureOptions(OptionsResolver $optionsResolver);
 }

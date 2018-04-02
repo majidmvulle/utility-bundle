@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
@@ -13,10 +16,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  */
 class MajidMvulleUtilityExtension extends Extension
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -26,6 +26,9 @@ class MajidMvulleUtilityExtension extends Extension
         $container->setParameter('majidmvulle.utility.twilio.sid', $config['twilio']['sid']);
         $container->setParameter('majidmvulle.utility.twilio.token', $config['twilio']['token']);
         $container->setParameter('majidmvulle.utility.twilio.from_number', $config['twilio']['from_number']);
+
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.yaml');
     }
 
     public function getAlias()

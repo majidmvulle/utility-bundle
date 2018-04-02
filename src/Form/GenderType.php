@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle\Form;
 
-use JMS\DiExtraBundle\Annotation as DI;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -11,9 +12,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Class GenderType.
  *
  * @author Majid Mvulle <majid@majidmvulle.com>
- *
- * @DI\FormType("majidmvulle.utility.form.gender")
- * @DI\Tag(name="form.type", attributes={"alias": "majidmvulle_utility_form_gender"})
  */
 class GenderType extends AbstractType
 {
@@ -25,9 +23,6 @@ class GenderType extends AbstractType
      */
     protected $choices;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->choices = [
@@ -36,10 +31,7 @@ class GenderType extends AbstractType
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['choices' => $this->choices, 'empty_value' => '-- Choose your Gender --']);
     }
@@ -47,7 +39,7 @@ class GenderType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): string
     {
         return ChoiceType::class;
     }
@@ -55,7 +47,7 @@ class GenderType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->getBlockPrefix();
     }
@@ -63,8 +55,8 @@ class GenderType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
-        return 'majidmvulle_utility_form_gender';
+        return '';
     }
 }

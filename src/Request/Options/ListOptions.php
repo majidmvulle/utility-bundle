@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle\Request\Options;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -11,10 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ListOptions extends AbstractOptions
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'page' => 1,
@@ -25,12 +24,7 @@ class ListOptions extends AbstractOptions
         $resolver->setAllowedTypes('per_page', ['null', 'int', 'string']);
     }
 
-    /**
-     * SQL kind of offset, 0-based.
-     *
-     * @return int|mixed
-     */
-    public function getOffset()
+    public function getOffset(): int
     {
         $page = $this->get('page');
         $per_page = $this->get('per_page');
@@ -42,12 +36,7 @@ class ListOptions extends AbstractOptions
         return ($page - 1) * $per_page;
     }
 
-    /**
-     * SQL helper method.
-     *
-     * @return mixed
-     */
-    public function getLimit()
+    public function getLimit(): ?string
     {
         return $this->get('per_page');
     }

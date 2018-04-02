@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle\Form;
 
-use JMS\DiExtraBundle\Annotation as DI;
 use MajidMvulle\Bundle\UtilityBundle\Validator\Constraints\MobileNumber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -12,38 +13,26 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Class MobileNumberType.
  *
  * @author Majid Mvulle <majid@majidmvulle.com>
- *
- * @DI\FormType("majidmvulle.utility.form.mobile_number")
- * @DI\Tag(name="form.type", attributes={"alias": "majidmvulle_utility_form_mobile_number"})
  */
 class MobileNumberType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['constraints' => [new MobileNumber()]]);
     }
 
-    public function getParent()
+    public function getParent(): string
     {
         return TextType::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->getBlockPrefix();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
-        return 'majidmvulle_utility_form_mobile_number';
+        return '';
     }
 }

@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle;
 
-use JMS\DiExtraBundle\Annotation as DI;
 use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -10,8 +11,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
  * Class MailerManager.
  *
  * @author Majid Mvulle <majid@majidmvulle.com>
- *
- * @DI\Service("majidmvulle.utility.mailer_manager")
  */
 class MailerManager
 {
@@ -40,23 +39,6 @@ class MailerManager
      */
     private $fromSenderName;
 
-    /**
-     * MailerManager Constructor.
-     *
-     * @DI\InjectParams({
-     * "kernel" = @DI\Inject("kernel"),
-     * "templating" = @DI\Inject("templating"),
-     * "mailer" = @DI\Inject("mailer"),
-     * "fromSenderEmail" = @DI\Inject("%majidmvulle.utility.mailer.from_email%"),
-     * "fromSenderName" = @DI\Inject("%majidmvulle.utility.mailer.from_sender_name%")
-     * })
-     *
-     * @param KernelInterface $kernel
-     * @param TwigEngine      $templating
-     * @param \Swift_Mailer   $mailer
-     * @param $fromSenderEmail
-     * @param $fromSenderName
-     */
     public function __construct(KernelInterface $kernel, TwigEngine $templating, \Swift_Mailer $mailer, $fromSenderEmail, $fromSenderName)
     {
         $this->env = $kernel->getEnvironment();
@@ -67,8 +49,6 @@ class MailerManager
     }
 
     /**
-     * Sends an HTML email.
-     *
      * @param string|array $to
      * @param string       $subject
      * @param string       $template
@@ -78,22 +58,14 @@ class MailerManager
      * @throws \Exception
      * @throws \Twig_Error
      */
-    public function sendByTemplate($to, $subject, $template, $parameters = [], $mimeType = 'text/html')
+    public function sendByTemplate(mixed $to, $subject, $template, $parameters = [], $mimeType = 'text/html'): void
     {
         $this->send($to, $subject, $this->templating->render($template, $parameters), $mimeType);
     }
 
-    /**
-     * Sends a text email.
-     *
-     * @param string|array $to
-     * @param string       $subject
-     * @param string       $content
-     * @param string       $mimeType
-     */
-    public function send($to, $subject, $content, $mimeType = 'text/plain')
+    public function send($to, $subject, $content, $mimeType = 'text/plain'): void
     {
-        if ($this->env !== 'prod') {
+        if ('prod' !== $this->env) {
             return;
         }
 

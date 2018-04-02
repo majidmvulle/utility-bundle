@@ -1,21 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MajidMvulle\Bundle\UtilityBundle;
 
-use JMS\DiExtraBundle\Annotation as DI;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberType;
 use libphonenumber\PhoneNumberUtil;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Twilio\Rest\Api\V2010\Account\MessageInstance;
 use Twilio\Rest\Client;
 
 /**
  * Class TwilioManager.
  *
  * @author Majid Mvulle <majid@majidmvulle.com>
- *
- * @DI\Service("majidmvulle.utility.twilio_manager")
  */
 class TwilioManager
 {
@@ -39,22 +39,7 @@ class TwilioManager
      */
     private $env;
 
-    /**
-     * TwilioManager Constructor.
-     *
-     * @DI\InjectParams({
-     * "sid" = @DI\Inject("%majidmvulle.utility.twilio.sid%"),
-     * "token" = @DI\Inject("%majidmvulle.utility.twilio.token%"),
-     * "fromNumber" = @DI\Inject("%majidmvulle.utility.twilio.from_number%"),
-     * "kernel" = @DI\Inject("kernel")
-     * })
-     *
-     * @param $sid
-     * @param $token
-     * @param $fromNumber
-     * @param KernelInterface $kernel
-     */
-    public function __construct($sid, $token, $fromNumber, KernelInterface $kernel)
+    public function __construct(KernelInterface $kernel, $sid, $token, $fromNumber)
     {
         $this->fromNumber = $fromNumber;
         $this->client = new Client($sid, $token);
@@ -62,19 +47,11 @@ class TwilioManager
         $this->env = $kernel->getEnvironment();
     }
 
-    /**
-     * Sends an SMS message.
-     *
-     * @param $toPhoneNumber
-     * @param $message
-     *
-     * @return \Twilio\Rest\Api\V2010\Account\MessageInstance
-     */
-    public function sendSms($toPhoneNumber, $message)
+    public function sendSms($toPhoneNumber, $message): ?MessageInstance
     {
         $response = null;
 
-        if ($this->env !== 'prod') {
+        if ('prod' !== $this->env) {
             return $response;
         }
 
@@ -85,7 +62,7 @@ class TwilioManager
                 return;
             }
 
-            if ($this->phoneUtil->getNumberType($phoneNumberProto) !== PhoneNumberType::MOBILE) { //only send sms to mobile numbers
+            if (PhoneNumberType::MOBILE !== $this->phoneUtil->getNumberType($phoneNumberProto)) { //only send sms to mobile numbers
                 return;
             }
 

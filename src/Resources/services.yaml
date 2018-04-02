@@ -1,0 +1,66 @@
+services:
+    MajidMvulle\Bundle\UtilityBundle\EventListener\OptionsAnnotationListener:
+        arguments:
+            - '@annotations.reader'
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    MajidMvulle\Bundle\UtilityBundle\Form\CityType:
+        tags:
+           - { name: form.type }
+        alias: majidmvulle.utility.form.city
+
+    MajidMvulle\Bundle\UtilityBundle\Form\GenderType:
+        tags:
+           - { name: form.type }
+        alias: majidmvulle.utility.form.gender
+
+    MajidMvulle\Bundle\UtilityBundle\Form\LanguageType:
+        tags:
+           - { name: form.type }
+        alias: majidmvulle.utility.form.language
+
+    MajidMvulle\Bundle\UtilityBundle\Form\MobileNumberType:
+        tags:
+           - { name: form.type }
+        alias: majidmvulle.utility.form.mobile_number
+
+    MajidMvulle\Bundle\UtilityBundle\Form\PhoneNumberType:
+        tags:
+           - { name: form.type }
+        alias: majidmvulle.utility.form.phone_number
+
+    MajidMvulle\Bundle\UtilityBundle\Request\ParamConverter\SecureDoctrineParamConverter:
+        arguments:
+            - '@doctrine'
+            - '@security.authorization_checker'
+        tags:
+            - { name: request.param_converter, attributes: {converter: 'utility.secure_doctrine_param_converter', priority: 1} }
+
+    MajidMvulle\Bundle\UtilityBundle\Twig\Markdown:
+        alias: majidmvulle.utility.twig.markdown
+
+    MajidMvulle\Bundle\UtilityBundle\Twig\MarkdownTwigExtension:
+        arguments:
+           - MajidMvulle\Bundle\UtilityBundle\Twig\Markdown
+        tags:
+            - { name: twig.extension }
+        alias: majidmvulle.utility.twig.markdown_extension
+        public: false
+
+    MajidMvulle\Bundle\UtilityBundle\MailerManager:
+        arguments:
+            - '@kernel'
+            - '@templating.engine.twig'
+            - '@mailer'
+            - '%majidmvulle.utility.mailer.from_email%'
+            - '%majidmvulle.utility.mailer.from_sender_name%'
+        alias: majidmvulle.utility.mailer_manager
+
+    MajidMvulle\Bundle\UtilityBundle\TwilioManager:
+        arguments:
+            - '@kernel'
+            - '%majidmvulle.utility.twilio.sid%'
+            - '%majidmvulle.utility.twilio.token%'
+            - '%majidmvulle.utility.twilio.from_number%'
+        alias: majidmvulle.utility.twilio_manager
