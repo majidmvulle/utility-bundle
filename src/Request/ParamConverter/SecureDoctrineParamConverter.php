@@ -116,7 +116,7 @@ class SecureDoctrineParamConverter extends DoctrineParamConverter
         return $r->getShortName();
     }
 
-    private function find($class, Request $request, $options, $name): mixed
+    private function find($class, Request $request, $options, $name): ?mixed
     {
         if ($options['mapping'] || $options['exclude']) {
             return false;
