@@ -35,10 +35,10 @@ abstract class AbstractOptions implements OptionsInterface
         return isset($this->options[$option]);
     }
 
-    public function get($option): ?string
+    public function get($option)
     {
         if (!$this->has($option)) {
-            return null;
+            return;
         }
 
         return $this->options[$option];

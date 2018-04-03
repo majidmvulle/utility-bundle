@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MajidMvulle\Bundle\UtilityBundle\Annotation;
 
 use Doctrine\Common\Annotations\Annotation\Target;
+use MajidMvulle\Bundle\UtilityBundle\Request\Options\ListOptions;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationAnnotation;
 
 /**
@@ -35,7 +36,6 @@ class Options extends ConfigurationAnnotation
     public function __construct(array $values)
     {
         parent::__construct($values);
-
         if (!class_exists($this->class)) {
             throw new \RuntimeException('Options annotation requires an existing class argument!');
         }
@@ -71,7 +71,7 @@ class Options extends ConfigurationAnnotation
         return $this->requestParams;
     }
 
-    public function setRequestParams($requestParams): self
+    public function setRequestParams($requestParams): ListOptions
     {
         $this->requestParams = $requestParams;
 
