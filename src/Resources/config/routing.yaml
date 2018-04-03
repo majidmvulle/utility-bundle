@@ -1,0 +1,3 @@
+majidmvulle_utility:
+    type: annotation
+    resource: "@MajidMvulleUtilityBundle/Controller/RedirectController.php"
