@@ -8,27 +8,32 @@ services:
     MajidMvulle\Bundle\UtilityBundle\Form\CityType:
         tags:
            - { name: form.type }
-        alias: majidmvulle.utility.form.city
+
+    majidmvulle.utility.form.city: '@MajidMvulle\Bundle\UtilityBundle\Form\CityType'
 
     MajidMvulle\Bundle\UtilityBundle\Form\GenderType:
         tags:
            - { name: form.type }
-        alias: majidmvulle.utility.form.gender
+
+    majidmvulle.utility.form.gender: '@MajidMvulle\Bundle\UtilityBundle\Form\GenderType'
 
     MajidMvulle\Bundle\UtilityBundle\Form\LanguageType:
         tags:
            - { name: form.type }
-        alias: majidmvulle.utility.form.language
+
+    majidmvulle.utility.form.language: '@MajidMvulle\Bundle\UtilityBundle\Form\LanguageType'
 
     MajidMvulle\Bundle\UtilityBundle\Form\MobileNumberType:
         tags:
            - { name: form.type }
-        alias: majidmvulle.utility.form.mobile_number
+
+    majidmvulle.utility.form.mobile_number: '@MajidMvulle\Bundle\UtilityBundle\Form\MobileNumberType'
 
     MajidMvulle\Bundle\UtilityBundle\Form\PhoneNumberType:
         tags:
            - { name: form.type }
-        alias: majidmvulle.utility.form.phone_number
+
+    majidmvulle.utility.form.phone_number: '@MajidMvulle\Bundle\UtilityBundle\Form\PhoneNumberType'
 
     MajidMvulle\Bundle\UtilityBundle\Request\ParamConverter\SecureDoctrineParamConverter:
         arguments:
@@ -38,15 +43,18 @@ services:
             - { name: request.param_converter, priority: 1 }
 
     MajidMvulle\Bundle\UtilityBundle\Twig\Markdown:
-        alias: majidmvulle.utility.twig.markdown
+        class: MajidMvulle\Bundle\UtilityBundle\Twig\Markdown
+
+    majidmvulle.utility.twig.markdown: '@MajidMvulle\Bundle\UtilityBundle\Twig\Markdown'
 
     MajidMvulle\Bundle\UtilityBundle\Twig\MarkdownTwigExtension:
         arguments:
-           - MajidMvulle\Bundle\UtilityBundle\Twig\Markdown
+           - '@MajidMvulle\Bundle\UtilityBundle\Twig\Markdown'
         tags:
             - { name: twig.extension }
-        alias: majidmvulle.utility.twig.markdown_extension
         public: false
+
+    majidmvulle.utility.twig.markdown_extension: '@MajidMvulle\Bundle\UtilityBundle\Twig\MarkdownTwigExtension'
 
     MajidMvulle\Bundle\UtilityBundle\MailerManager:
         arguments:
@@ -55,7 +63,8 @@ services:
             - '@mailer'
             - '%majidmvulle.utility.mailer.from_email%'
             - '%majidmvulle.utility.mailer.from_sender_name%'
-        alias: majidmvulle.utility.mailer_manager
+
+    majidmvulle.utility.mailer_manager: '@MajidMvulle\Bundle\UtilityBundle\MailerManager'
 
     MajidMvulle\Bundle\UtilityBundle\TwilioManager:
         arguments:
@@ -63,4 +72,5 @@ services:
             - '%majidmvulle.utility.twilio.sid%'
             - '%majidmvulle.utility.twilio.token%'
             - '%majidmvulle.utility.twilio.from_number%'
-        alias: majidmvulle.utility.twilio_manager
+
+    majidmvulle.utility.twilio_manager: '@MajidMvulle\Bundle\UtilityBundle\TwilioManager'

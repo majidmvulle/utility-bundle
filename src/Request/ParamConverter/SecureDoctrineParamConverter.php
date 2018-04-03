@@ -133,7 +133,7 @@ class SecureDoctrineParamConverter extends DoctrineParamConverter
         try {
             return $this->getManager($options['entity_manager'], $class)->getRepository($class)->$method($id);
         } catch (NoResultException $e) {
-            return;
+            return null;
         }
     }
 

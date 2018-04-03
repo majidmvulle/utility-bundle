@@ -59,11 +59,11 @@ class TwilioManager
             $phoneNumberProto = $this->phoneUtil->parse($toPhoneNumber, 'AE');
 
             if (!$this->phoneUtil->isValidNumberForRegion($phoneNumberProto, 'AE')) { //only send sms to UAE numbers
-                return;
+                return null;
             }
 
             if (PhoneNumberType::MOBILE !== $this->phoneUtil->getNumberType($phoneNumberProto)) { //only send sms to mobile numbers
-                return;
+                return null;
             }
 
             $phoneNumber = $this->phoneUtil->format($phoneNumberProto, PhoneNumberFormat::INTERNATIONAL);
