@@ -3,6 +3,8 @@
   "license": "None",
   "type": "symfony-bundle",
   "description": "Library for utility functionality.",
+  "prefer-stable": true,
+  "minimum-stability": "stable",
   "authors": [
     {
       "name": "Majid Mvulle",
@@ -13,7 +15,7 @@
     "psr-4": {"MajidMvulle\\Bundle\\UtilityBundle\\": "src/"}
   },
   "require": {
-    "php": ">=7.2",
+    "php": ">=7.1",
     "jms/serializer": "^1.13.0",
     "symfony/yaml": "^3.0 || ^4.0",
     "symfony/form": "^3.0 || ^4.0",
@@ -23,7 +25,6 @@
     "gedmo/doctrine-extensions": "^2.4",
     "doctrine/annotations": "^1.6.0",
     "erusev/parsedown": "^1.6",
-    "swiftmailer/swiftmailer": "^6.0.2",
     "giggsey/libphonenumber-for-php": "^8.8",
     "twilio/sdk": "^5.15",
     "sensio/framework-extra-bundle": "^5.1"

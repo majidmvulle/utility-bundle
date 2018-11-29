@@ -56,16 +56,6 @@ services:
 
     majidmvulle.utility.twig.markdown_extension: '@MajidMvulle\Bundle\UtilityBundle\Twig\MarkdownTwigExtension'
 
-    MajidMvulle\Bundle\UtilityBundle\MailerManager:
-        arguments:
-            - '@kernel'
-            - '@templating.engine.twig'
-            - '@mailer'
-            - '%majidmvulle.utility.mailer.from_email%'
-            - '%majidmvulle.utility.mailer.from_sender_name%'
-
-    majidmvulle.utility.mailer_manager: '@MajidMvulle\Bundle\UtilityBundle\MailerManager'
-
     MajidMvulle\Bundle\UtilityBundle\TwilioManager:
         arguments:
             - '@kernel'
