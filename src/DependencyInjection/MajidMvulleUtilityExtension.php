@@ -26,6 +26,7 @@ class MajidMvulleUtilityExtension extends Extension
         $container->setParameter('majidmvulle.utility.twilio.sid', $config['twilio']['sid']);
         $container->setParameter('majidmvulle.utility.twilio.token', $config['twilio']['token']);
         $container->setParameter('majidmvulle.utility.twilio.from_number', $config['twilio']['from_number']);
+        $container->setParameter('majidmvulle.utility.twilio.verification_sid', $config['twilio']['verification_sid']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yaml');

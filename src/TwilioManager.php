@@ -39,15 +39,29 @@ class TwilioManager
      */
     private $env;
 
-    public function __construct(KernelInterface $kernel, $sid, $token, $fromNumber)
+    /**
+     * @var string
+     */
+    private $verificationSid;
+
+    public function __construct(KernelInterface $kernel, string $sid, string $token, string $fromNumber, string $verificationSid)
     {
         $this->fromNumber = $fromNumber;
         $this->client = new Client($sid, $token);
         $this->phoneUtil = PhoneNumberUtil::getInstance();
         $this->env = $kernel->getEnvironment();
+        $this->verificationSid = $verificationSid;
     }
 
-    public function sendSms($toPhoneNumber, $message): ?MessageInstance
+    /**
+     * @param string $toPhoneNumber
+     * @param string $message
+     *
+     * @throws \Twilio\Exceptions\TwilioException
+     *
+     * @return MessageInstance|null
+     */
+    public function sendSms(string $toPhoneNumber, string $message): ?MessageInstance
     {
         $response = null;
 
@@ -56,23 +70,75 @@ class TwilioManager
         }
 
         try {
-            $phoneNumberProto = $this->phoneUtil->parse($toPhoneNumber, 'AE');
+            $mobileNumber = $this->getFormattedMobileNumber($toPhoneNumber);
 
-            if (!$this->phoneUtil->isValidNumberForRegion($phoneNumberProto, 'AE')) { //only send sms to UAE numbers
+            if (!$mobileNumber) {
                 return null;
             }
 
-            if (PhoneNumberType::MOBILE !== $this->phoneUtil->getNumberType($phoneNumberProto)) { //only send sms to mobile numbers
-                return null;
-            }
-
-            $phoneNumber = $this->phoneUtil->format($phoneNumberProto, PhoneNumberFormat::INTERNATIONAL);
-
-            $response = $this->client->messages->create($phoneNumber, ['from' => $this->fromNumber, 'body' => $message]);
+            $response = $this->client->messages->create($mobileNumber, ['from' => $this->fromNumber, 'body' => $message]);
         } catch (NumberParseException $e) {
             //ignore
         }
 
         return $response;
+    }
+
+    public function sendVerificationCode(string $toPhoneNumber): void
+    {
+        try {
+            $mobileNumber = $this->getFormattedMobileNumber($toPhoneNumber);
+
+            if (!$mobileNumber) {
+                return;
+            }
+
+            $this->client->verify->v2->services($this->verificationSid)->verifications
+                ->create($mobileNumber, 'sms');
+        } catch (NumberParseException $e) {
+            //ignore
+        }
+    }
+
+    public function checkVerificationCode(string $toPhoneNumber, string $code): bool
+    {
+        try {
+            $mobileNumber = $this->getFormattedMobileNumber($toPhoneNumber);
+
+            if (!$mobileNumber) {
+                return false;
+            }
+
+            $verificationCheck = $this->client->verify->v2->services($this->verificationSid)->verificationChecks
+                ->create($code, ['to' => $mobileNumber]);
+
+            return 'approved' === $verificationCheck->status;
+        } catch (NumberParseException $e) {
+            //ignore
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $phoneNumber
+     *
+     * @throws NumberParseException
+     *
+     * @return string|null
+     */
+    private function getFormattedMobileNumber(string $phoneNumber): ?string
+    {
+        $phoneNumberProto = $this->phoneUtil->parse($phoneNumber, 'AE');
+
+        if (!$this->phoneUtil->isValidNumberForRegion($phoneNumberProto, 'AE')) { //only send sms to UAE numbers
+            return null;
+        }
+
+        if (PhoneNumberType::MOBILE !== $this->phoneUtil->getNumberType($phoneNumberProto)) { //only send sms to mobile numbers
+            return null;
+        }
+
+        return $this->phoneUtil->format($phoneNumberProto, PhoneNumberFormat::INTERNATIONAL);
     }
 }

@@ -62,5 +62,6 @@ services:
             - '%majidmvulle.utility.twilio.sid%'
             - '%majidmvulle.utility.twilio.token%'
             - '%majidmvulle.utility.twilio.from_number%'
+            - '%majidmvulle.utility.twilio.verification_sid%'
 
     majidmvulle.utility.twilio_manager: '@MajidMvulle\Bundle\UtilityBundle\TwilioManager'
