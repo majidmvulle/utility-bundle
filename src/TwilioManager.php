@@ -44,33 +44,56 @@ class TwilioManager
      */
     private $verificationSid;
 
-    public function __construct(KernelInterface $kernel, string $sid, string $token, string $fromNumber, string $verificationSid)
+    /**
+     * @var string
+     */
+    private $locale;
+
+    /**
+     * @var string
+     */
+    private $region;
+
+    public function __construct(KernelInterface $kernel,
+                                string $sid,
+                                string $token,
+                                string $fromNumber,
+                                string $verificationSid,
+                                string $locale,
+                                string $region)
     {
         $this->fromNumber = $fromNumber;
         $this->client = new Client($sid, $token);
         $this->phoneUtil = PhoneNumberUtil::getInstance();
         $this->env = $kernel->getEnvironment();
         $this->verificationSid = $verificationSid;
+        $this->locale = $locale;
+        $this->region = $region;
     }
 
     /**
      * @param string $toPhoneNumber
      * @param string $message
+     * @param string $region
      *
      * @throws \Twilio\Exceptions\TwilioException
      *
      * @return MessageInstance|null
      */
-    public function sendSms(string $toPhoneNumber, string $message): ?MessageInstance
+    public function sendSms(string $toPhoneNumber, string $message, ?string $region = null): ?MessageInstance
     {
         $response = null;
+
+        if (!$region) {
+            $region = $this->region;
+        }
 
         if ('prod' !== $this->env) {
             return $response;
         }
 
         try {
-            $mobileNumber = $this->getFormattedMobileNumber($toPhoneNumber);
+            $mobileNumber = $this->getFormattedMobileNumber($toPhoneNumber, $region);
 
             if (!$mobileNumber) {
                 return null;
@@ -84,26 +107,30 @@ class TwilioManager
         return $response;
     }
 
-    public function sendVerificationCode(string $toPhoneNumber): void
+    public function sendVerificationCode(string $toPhoneNumber, ?string $region = null): void
     {
+        if (!$region) {
+            $region = $this->region;
+        }
+
         try {
-            $mobileNumber = $this->getFormattedMobileNumber($toPhoneNumber);
+            $mobileNumber = $this->getFormattedMobileNumber($toPhoneNumber, $region);
 
             if (!$mobileNumber) {
                 return;
             }
 
             $this->client->verify->v2->services($this->verificationSid)->verifications
-                ->create($mobileNumber, 'sms');
+                ->create($mobileNumber, 'sms', ['locale' => $this->locale]);
         } catch (NumberParseException $e) {
             //ignore
         }
     }
 
-    public function checkVerificationCode(string $toPhoneNumber, string $code): bool
+    public function checkVerificationCode(string $toPhoneNumber, string $code, ?string $region = null): bool
     {
         try {
-            $mobileNumber = $this->getFormattedMobileNumber($toPhoneNumber);
+            $mobileNumber = $this->getFormattedMobileNumber($toPhoneNumber, $region);
 
             if (!$mobileNumber) {
                 return false;
@@ -122,20 +149,21 @@ class TwilioManager
 
     /**
      * @param string $phoneNumber
+     * @param string $region
      *
      * @throws NumberParseException
      *
      * @return string|null
      */
-    private function getFormattedMobileNumber(string $phoneNumber): ?string
+    private function getFormattedMobileNumber(string $phoneNumber, string $region): ?string
     {
-        $phoneNumberProto = $this->phoneUtil->parse($phoneNumber, 'AE');
+        $phoneNumberProto = $this->phoneUtil->parse($phoneNumber, $region);
 
-        if (!$this->phoneUtil->isValidNumberForRegion($phoneNumberProto, 'AE')) { //only send sms to UAE numbers
+        if (!$this->phoneUtil->isValidNumberForRegion($phoneNumberProto, $region)) {
             return null;
         }
 
-        if (PhoneNumberType::MOBILE !== $this->phoneUtil->getNumberType($phoneNumberProto)) { //only send sms to mobile numbers
+        if (PhoneNumberType::MOBILE !== $this->phoneUtil->getNumberType($phoneNumberProto)) {
             return null;
         }
 

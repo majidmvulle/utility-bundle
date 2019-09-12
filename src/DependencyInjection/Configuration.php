@@ -33,6 +33,8 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('token')->defaultValue('')->end()
                         ->scalarNode('from_number')->defaultValue('')->end()
                         ->scalarNode('verification_sid')->defaultValue('')->end()
+                        ->scalarNode('locale')->defaultValue('en')->end()
+                        ->scalarNode('region')->defaultValue('AE')->end()
                     ->end()
                 ->end()//twilio
             ->end();
