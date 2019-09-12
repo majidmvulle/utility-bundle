@@ -129,6 +129,10 @@ class TwilioManager
 
     public function checkVerificationCode(string $toPhoneNumber, string $code, ?string $region = null): bool
     {
+        if(!$region){
+            $region = $this->region;
+        }
+
         try {
             $mobileNumber = $this->getFormattedMobileNumber($toPhoneNumber, $region);
 
