@@ -58,7 +58,7 @@ services:
 
     MajidMvulle\Bundle\UtilityBundle\TwilioManager:
         arguments:
-            - '@kernel'
+            - '%kernel.environment%'
             - '%majidmvulle.utility.twilio.sid%'
             - '%majidmvulle.utility.twilio.token%'
             - '%majidmvulle.utility.twilio.from_number%'

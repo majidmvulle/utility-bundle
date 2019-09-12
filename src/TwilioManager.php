@@ -54,7 +54,7 @@ class TwilioManager
      */
     private $region;
 
-    public function __construct(KernelInterface $kernel,
+    public function __construct(string $environment,
                                 string $sid,
                                 string $token,
                                 string $fromNumber,
@@ -65,7 +65,7 @@ class TwilioManager
         $this->fromNumber = $fromNumber;
         $this->client = new Client($sid, $token);
         $this->phoneUtil = PhoneNumberUtil::getInstance();
-        $this->env = $kernel->getEnvironment();
+        $this->env = $environment;
         $this->verificationSid = $verificationSid;
         $this->locale = $locale;
         $this->region = $region;
